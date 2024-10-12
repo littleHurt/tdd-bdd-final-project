@@ -15,7 +15,7 @@
 ######################################################################
 
 """
-Product Steps
+Product Steps, edited on 2024-10-12.
 
 Steps file for products.feature
 
@@ -47,6 +47,13 @@ def step_impl(context):
     # load the database with new products
     #
     for row in context.table:
-        #
-        # ADD YOUR CODE HERE TO CREATE PRODUCTS VIA THE REST API
-        #
+        payload = {
+            "name": row['name'],
+            "description": row['description'],
+            "price": row['price'],
+            "available": row['available'] in ['True', 'true', '1'],
+            "category": row['category']
+        }
+        context.resp = requests.post(rest_endpoint, json=payload)
+        assert context.resp.status_code == HTTP_201_CREATED
+# End of function: step_impl()
